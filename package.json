@@ -1,0 +1,32 @@
+{
+  "name": "dai-pelas-discord",
+  "version": "1.0.0",
+  "description": "",
+  "main": "./src/index.js",
+  "scripts": {
+    "build": "babel ./src/ -d dist",
+    "serve": "npm run build && node ./dist/index.js",
+    "dev": "nodemon --exec babel-node ./dev.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@babel/polyfill": "^7.8.7",
+    "body-parser": "^1.19.0",
+    "express": "^4.17.1",
+    "mongoose": "^5.10.5"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.8.4",
+    "@babel/core": "^7.9.0",
+    "@babel/node": "^7.8.7",
+    "@babel/plugin-transform-runtime": "^7.11.5",
+    "@babel/polyfill": "^7.11.5",
+    "@babel/preset-env": "^7.9.0",
+    "babel-plugin-inline-json-import": "^0.3.2",
+    "babel-plugin-module-alias": "^1.6.0",
+    "babel-plugin-module-resolver": "^4.0.0",
+    "dotenv": "^8.2.0",
+    "nodemon": "^2.0.2"
+  }
+}
