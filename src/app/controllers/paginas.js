@@ -3,12 +3,6 @@ import instagramSchema from '@/app/schemas/paginas';
 import { isValidObjectId } from 'mongoose';
 import axios from 'axios';
 
-const headers = {
-  headers: {
-    cookie: process.env.COOKIES,
-  },
-};
-
 const router = new Router();
 
 router.get('/', (req, res) => {
@@ -44,15 +38,20 @@ router.post('/', (req, res) => {
       if (pagina) {
         //Tentativa de fazer a requisição fazer a conta seguir automaticamente a pagina
         var pageId = await axios
-          .get(`${url}?__a=1`, headers)
+          .get(`${url}?__a=1`, {
+            headers: {
+              cookie: process.env.COOKIES,
+            },
+          })
           .catch((err) => console.error(err));
         pageId = pageId.data.graphql.user.id;
         console.log(pageId);
         axios
-          .post(
-            `https://www.instagram.com/web/friendships/${pageId}/follow/`,
-            headers
-          )
+          .post(`https://www.instagram.com/web/friendships/${pageId}/follow/`, {
+            headers: {
+              Cookies: process.env.COOKIES,
+            },
+          })
           .then((res) => {
             console.log(res.data);
           })
