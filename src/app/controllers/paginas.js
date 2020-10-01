@@ -1,6 +1,14 @@
 import { Router } from 'express';
 import instagramSchema from '@/app/schemas/paginas';
 import { isValidObjectId } from 'mongoose';
+import axios from 'axios';
+
+const headers = {
+  headers: {
+    cookie: process.env.COOKIES,
+  }
+}
+
 const router = new Router();
 
 router.get('/', (req, res) => {
@@ -20,12 +28,20 @@ router.get('/', (req, res) => {
 router.post('/', (req, res) => {
   const { nome, url } = req.body;
 
-  if (!nome || !url || url.toLowerCase().search("instagram.com/") == -1) {
+  if (!nome || !url || url.toLowerCase().search("https://www.instagram.com/") == -1) {
     return res.status(400).send({ error: "Bad request" });
   }
 
-  instagramSchema.create({ nome, url }).then(pagina => {
+  instagramSchema.create({ nome, url }).then(async pagina => {
     if (pagina) {
+
+      //Tentativa de fazer a requisição fazer a conta seguir automaticamente a pagina
+      var pageId = await axios.get(`${url}?__a=1`, headers).catch(err => console.error(err));
+      pageId = pageId.data.graphql.user.id;
+      console.log(pageId);
+      axios.post(`https://www.instagram.com/web/friendships/${pageId}/follow/`, headers).catch(err => {
+        console.error(err);
+      })
       return res.send(pagina);
     }
     else {
@@ -42,7 +58,7 @@ router.put('/:id', (req, res) => {
   const { id } = req.params;
   const { nome, url } = req.body;
 
-  if (!id || !isValidObjectId(id) || !nome || !url || url.toLowerCase().search("instagram.com/") == -1) {
+  if (!id || !isValidObjectId(id) || !nome || !url || url.toLowerCase().search("https://www.instagram.com/") == -1) {
     return res.status(400).send({ error: "Bad request" });
   }
 

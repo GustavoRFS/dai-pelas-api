@@ -11,12 +11,6 @@ const instagramSchema = new mongoose.Schema({
     type: String,
     required: true,
     trim: true,
-  },
-  hrefs: {
-    type: Array,
-    required: true,
-    default: [],
-    select: false,
   }
 });
 
